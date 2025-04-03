@@ -115,3 +115,24 @@ def test_generate_choice_id():
     choice2 = question.add_choice('b', False)
     assert choice1.id == 1
     assert choice2.id == 2
+
+
+@pytest.fixture
+def sample_question():
+    question = Question(title='Sample Question', max_selections=2)
+    choice1 = question.add_choice('Option A', True)
+    choice2 = question.add_choice('Option B', False)
+    choice3 = question.add_choice('Option C', True)
+    return question
+
+
+def test_select_correct_choices_with_fixture(sample_question):
+    selected = sample_question.select_choices(
+        [sample_question.choices[0].id, sample_question.choices[2].id])
+    assert selected == [sample_question.choices[0].id,
+                        sample_question.choices[2].id]
+
+
+def test_remove_all_choices_with_fixture(sample_question):
+    sample_question.remove_all_choices()
+    assert len(sample_question.choices) == 0
